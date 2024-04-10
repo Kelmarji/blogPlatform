@@ -1,3 +1,3 @@
-import CreateProfilePage from './CreateProfilePage';
+import SignInPage from './SignInPage';
 
-export default CreateProfilePage;
+export default SignInPage;

@@ -1,72 +1,98 @@
-$mainGray: #E8E8E8;
-$mainBlue: rgba(24, 144, 255, 1);
-
-.CreateProfilePageBase {
+.list {
+    list-style: none;
     display: flex;
-    height: 100%;
-    width: 30%;
-    gap:22px;
     flex-direction: column;
-    background-color: #fff;
-    padding: 25px;
-    border: 1px solid #D9D9D9;
-    border-radius: 6px;
-    box-shadow: 0px 0.61px 2.93px 0px rgba(0, 0, 0, 0.0197),
-                0px 1.46px 7.05px 0px rgba(0, 0, 0, 0.0283),
-                0px 2.75px 13.27px 0px rgba(0, 0, 0, 0.035),
-                0px 4.91px 23.68px 0px rgba(0, 0, 0, 0.0417),
-                0px 9.19px 44.28px 0px rgba(0, 0, 0, 0.0503),
-                0px 22px 106px 0px rgba(0, 0, 0, 0.07);
+    justify-content: space-between;
+    gap: 20px;
 
-    h3 {
-        margin: 0px auto 0px auto;
-        font-size:2rem;
-        text-align: center;
+    .listItem {
+        width: 900px;
+        height: 140px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 4px 12px 0px #00000026;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .HeaderItem {
+            display: flex;
+            justify-content: space-between;
+            .HeaderTitle {
+            .HeaderLeft {
+                display: flex;
+                gap: 20px;
+
+            }
+            .tags {
+                list-style: none;
+                display: flex;
+                padding: 0;
+                padding-top: 10px;
+                align-items: flex-start;
+                gap: 5px;
+                .tag {
+                    padding: 1px 3px;
+                    border-radius: 2px;
+                    border: 1px solid #00000080;
+                    font-weight: 400;
+                }
+            }
+        }
+            .HeaderRight {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                flex-wrap: wrap;
+                height: auto;
+
+                h3 {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                img {
+                    width: 46px;
+                    height: 46px;
+                }
+            }
+        h2 {
+            color: #1890FF;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+        }
+        .LikeCounterUncheked {
+            font-size: 1rem;
+            color: black;
+                ::before {
+                    content: "   ";
+                    position: relative;
+                    left: -5px;
+                    background-image: url(Like.svg);
+                    background-size: 100%;
+                    background-position: 50% 70%;
+                    background-repeat: no-repeat;
+                }
+        } 
+        .LikeCounterCheked {
+            font-size: 1rem;
+            color: black;
+                ::before {
+                    content: "   ";
+                    position: relative;
+                    left: -5px;
+                    background-image: url(LikeFill.svg);
+                    background-size: 100%;
+                    background-position: 50% 70%;
+                    background-repeat: no-repeat;
+                }
+        }   
     }
-    span:last-child {
-        text-align: center;
+
+        .DescPost {
+            width: 682px;
+            font-size: 0.8rem;
+        }
     }
-}
-.inputField {
-    display: flex;
-    gap: 5px;
-    flex-direction: column;
-    input {
-        border: 1px solid #D9D9D9;
-        border-radius: 4px;
-        padding: 15px;
-        outline: none;
-    }
-    span {
-        font-size: 1rem;
-        color: black;
-        font-weight: 400;
-    }
-}
-
-.inputAgree {
-    display: flex;
-    gap: 5%;
-    padding: 25px;
-    border-top: 1px solid $mainGray;
-}
-
-.CreateBtn {
-    width: 100%;
-    height: 50px;
-    background-color: $mainBlue;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 24px;
-}
-
-.CreateBtnDisabled {
-    background-color: #D9D9D9;
-}
-
-.SignIn {
-    text-decoration: none;
-    color: $mainBlue
 }

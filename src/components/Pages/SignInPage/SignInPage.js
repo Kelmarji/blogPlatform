@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import s from './CreateProfile.module.scss';
+import s from './SingInPage.module.scss';
 
-const CreateProfilePage = () => {
+const SignInPage = () => {
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   return (
@@ -38,4 +38,4 @@ const CreateProfilePage = () => {
   );
 };
 
-export default CreateProfilePage;
+export default SignInPage;
