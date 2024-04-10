@@ -1,0 +1,34 @@
+$signInGreen: #52C41A;
+
+.HeaderBase {
+    font-weight: 400;
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    :nth-child(1) {
+        margin-left: 2%;
+    }
+    :nth-last-child(1) {
+        margin-right: 2%;
+    }
+}
+
+.HeaderBtnGroup {
+    display: flex;
+    gap: 40px;
+    button {
+    width: 100%;
+    text-wrap: nowrap;
+    }
+    .HeaderBtn {
+        border-radius: 5px;
+    }
+    .signUp {
+        padding: 5px;
+        color: $signInGreen;
+        border: 1px solid $signInGreen;
+    }
+}
