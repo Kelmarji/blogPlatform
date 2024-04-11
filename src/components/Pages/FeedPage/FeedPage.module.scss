@@ -1,12 +1,20 @@
+.ListPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
 .list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     gap: 20px;
+    margin: 10px;
+    padding: 0;
+    width: 70%;
 
     .listItem {
-        width: 900px;
         height: 140px;
         background-color: #fff;
         border-radius: 5px;
@@ -91,8 +99,12 @@
     }
 
         .DescPost {
-            width: 682px;
+            width: 80%;
+
             font-size: 0.8rem;
         }
     }
 }
+.antpaginationitemlink {
+    background-image: none !important;
+  }

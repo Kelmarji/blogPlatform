@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Ava from '../CreateProfilePage/Rectangle 1.png';
+import Ava from '../Pages/FeedPage/Rectangle 1.png';
 
 import h from './Header.module.scss';
 

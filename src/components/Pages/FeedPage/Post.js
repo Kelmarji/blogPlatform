@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import s from './CreateProfile.module.scss';
 import Ava from './Rectangle 1.png';
+import s from './FeedPage.module.scss';
 
 const Post = () => {
   const [liked, setLiked] = useState(false);

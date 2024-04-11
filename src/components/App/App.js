@@ -1,8 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+// import CreateProfilePage from '../Pages/CreateProfilePage';
+// import FeedPage from '../Pages/FeedPage';
+// import SignInPage from '../Pages/SignInPage';
+
 import Header from '../Header';
-import CreateProfilePage from '../CreateProfilePage';
+import CreateArticle from '../CreateArticle';
 
 import A from './App.module.scss';
 
@@ -11,7 +15,7 @@ const App = () => {
   return (
     <div className={A.App}>
       <Header />
-      <CreateProfilePage />
+      <CreateArticle />
       <h1>{msg}</h1>
     </div>
   );
