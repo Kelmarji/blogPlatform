@@ -1,27 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Ava from '../Pages/FeedPage/Rectangle 1.png';
 
 import h from './Header.module.scss';
 
 const Header = () => {
-  const isLoged = true;
+  const [loged, SetLoged] = useState(false);
   return (
     <div className={h.HeaderBase}>
       <span>Realworld Blog</span>
       <div className={h.HeaderBtnGroup}>
-        {isLoged ? (
-          <div className={isLoged ? [h.HeaderBtnGroup, h.LogedBtn].join(' ') : h.HeaderBtnGroup}>
-            <button className={[h.HeaderBtn, h.signUp, h.CreateBtn].join(' ')}>Create Article</button>
+        {loged ? (
+          <div className={loged ? [h.HeaderBtnGroup, h.LogedBtn].join(' ') : h.HeaderBtnGroup}>
+            <Link to="/create" className={[h.HeaderBtn, h.signUp, h.CreateBtn].join(' ')} >Create Article</Link>
             <span>Jonh Doe</span>
             <img src={Ava} />
 
-            <button className={[h.HeaderBtn, h.LogoutBtn].join(' ')}>Log out</button>
+            <button className={[h.HeaderBtn, h.LogoutBtn].join(' ')} onClick={() => SetLoged(false)}>Log out</button>
           </div>
         ) : (
           <div className={h.HeaderBtnGroup}>
-            <button className={h.HeaderBtn}>Sign in</button>
-            <button className={[h.HeaderBtn, h.signUp].join(' ')}>Sing up</button>
+            <Link to="/login" className={h.HeaderBtn} onClick={() => SetLoged(true)}>Sign in</Link>
+            <Link to="/newuser" className={[h.HeaderBtn, h.signUp].join(' ')}>Sing up</Link>
           </div>
         )}
       </div>

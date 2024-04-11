@@ -18,6 +18,13 @@ $signInGreen: #52C41A;
 }
 
 .HeaderBtnGroup {
+    a {
+        text-wrap: nowrap;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        flex-wrap: nowrap;
+    }
     span {
     display: flex;
     flex: none;
@@ -30,7 +37,9 @@ $signInGreen: #52C41A;
     text-wrap: nowrap;
     }
     .HeaderBtn {
+        color: black;
         border-radius: 5px;
+        align-self: center;
     }
     .signUp {
         padding: 5px;
@@ -39,6 +48,7 @@ $signInGreen: #52C41A;
     }
     .CreateBtn {
         margin: 5px;
+        align-self: center;
     }
     .LogoutBtn {
         padding: 5px;
