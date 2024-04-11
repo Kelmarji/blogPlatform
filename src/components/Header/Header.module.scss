@@ -17,6 +17,11 @@ $signInGreen: #52C41A;
 }
 
 .HeaderBtnGroup {
+    span {
+    display: flex;
+    flex: none;
+    align-items: center;
+    }
     display: flex;
     gap: 40px;
     button {
@@ -31,4 +36,16 @@ $signInGreen: #52C41A;
         color: $signInGreen;
         border: 1px solid $signInGreen;
     }
+    .CreateBtn {
+        margin: 5px;
+    }
+    .LogoutBtn {
+        padding: 5px;
+        color: black;
+        border: 1px solid black;
+        margin: 5px;
+    }
+}
+.LogedBtn {
+    gap:20px;
 }
