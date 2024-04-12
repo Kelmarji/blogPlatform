@@ -1,18 +1,19 @@
 import React from 'react';
 import { Pagination, ConfigProvider } from 'antd';
 
+import PostBody from '../../PostBody/PostBody';
+
 import s from './FeedPage.module.scss';
-import Post from './Post';
 
 const FeedPage = () => {
   return (
     <div className={s.ListPage}>
       <ul className={s.list}>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        <PostBody />
+        <PostBody />
+        <PostBody />
+        <PostBody />
+        <PostBody />
       </ul>
       <ConfigProvider
         theme={{

@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React,{useState} from 'react';
+import { Typography } from 'antd';
 
-import Ava from './Rectangle 1.png';
-import s from './FeedPage.module.scss';
+import Ava from '../assets/Rectangle 1.png';
 
-const Post = () => {
+import s from './SelectedPost.module.scss';
+
+const { Text } = Typography;
+
+const SelectedPost = () => {
   const [liked, setLiked] = useState(false);
   const [id] = useState(Math.floor(Math.random() * 10));
   const changeLike = (value) => {
     setLiked(!value);
   };
-  return (
+  return(
     <li className={s.listItem}>
       <input
         style={{ display: 'none' }}
@@ -46,8 +50,12 @@ const Post = () => {
           consequat.
         </span>
       </div>
+      <div  style={{marginTop: '20px'}}>
+        <Text>pu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text dohya vajniipu pu pu text </Text>
+      </div>
     </li>
   );
 };
 
-export default Post;
+export default SelectedPost;
+

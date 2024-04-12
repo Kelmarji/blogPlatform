@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import s from './SingInPage.module.scss';
 
@@ -28,10 +29,10 @@ const SignInPage = () => {
       </button>
       <span>
         Don&apos;t have an account?{' '}
-        <a href="#" className={s.SignIn}>
+        <Link to='/newuser' className={s.SignIn}>
           {' '}
           Sign Up
-        </a>
+        </Link>
         .
       </span>
     </form>

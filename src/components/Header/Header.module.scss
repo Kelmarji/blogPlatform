@@ -15,16 +15,18 @@ $signInGreen: #52C41A;
     :nth-last-child(1) {
         margin-right: 2%;
     }
-}
-
-.HeaderBtnGroup {
     a {
         text-wrap: nowrap;
         margin: 0;
         padding: 0;
         text-decoration: none;
         flex-wrap: nowrap;
+        color: black
     }
+
+}
+
+.HeaderBtnGroup {
     span {
     display: flex;
     flex: none;

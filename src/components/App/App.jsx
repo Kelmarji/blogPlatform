@@ -7,6 +7,7 @@ import CreateProfilePage from '../Pages/CreateProfilePage';
 import FeedPage from '../Pages/FeedPage';
 import SignInPage from '../Pages/SignInPage';
 import CreateArticle from '../Pages/CreateArticle';
+import SelectedPost from '../SelectedPost';
 
 import A from './App.module.scss';
 
@@ -17,6 +18,8 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<FeedPage />} />
+        <Route path='/feed' element={<FeedPage />} />
+        <Route path='/feed/:id' element={<SelectedPost />} />
         <Route path="/create" element={<CreateArticle />} />
         <Route path="/newuser" element={<CreateProfilePage />} />
         <Route path="/login" element={<SignInPage />} />

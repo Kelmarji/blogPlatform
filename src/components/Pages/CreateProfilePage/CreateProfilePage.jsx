@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import s from './CreateProfile.module.scss';
 
@@ -38,7 +39,7 @@ const CreateProfilePage = () => {
         Create
       </button>
       <span>
-        Already have account? <a className={s.SignIn}>Sign In</a>.
+        Already have account? <Link to='/login' className={s.SignIn}>Sign In</Link>.
       </span>
     </form>
   );

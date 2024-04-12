@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Ava from '../Pages/FeedPage/Rectangle 1.png';
+import Ava from '../assets/Rectangle 1.png';
 
 import h from './Header.module.scss';
 
@@ -9,7 +9,7 @@ const Header = () => {
   const [loged, SetLoged] = useState(false);
   return (
     <div className={h.HeaderBase}>
-      <span>Realworld Blog</span>
+      <Link to='/feed' ><span>Realworld Blog</span></Link>
       <div className={h.HeaderBtnGroup}>
         {loged ? (
           <div className={loged ? [h.HeaderBtnGroup, h.LogedBtn].join(' ') : h.HeaderBtnGroup}>
@@ -21,7 +21,7 @@ const Header = () => {
           </div>
         ) : (
           <div className={h.HeaderBtnGroup}>
-            <Link to="/login" className={h.HeaderBtn} onClick={() => SetLoged(true)}>Sign in</Link>
+            <Link to="/login" className={h.HeaderBtn} onClick={() => SetLoged(false)}>Sign in</Link>
             <Link to="/newuser" className={[h.HeaderBtn, h.signUp].join(' ')}>Sing up</Link>
           </div>
         )}
@@ -29,5 +29,4 @@ const Header = () => {
     </div>
   );
 };
-
 export default Header;
