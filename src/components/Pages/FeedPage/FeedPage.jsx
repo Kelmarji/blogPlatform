@@ -1,19 +1,43 @@
-import React from 'react';
-import { Pagination, ConfigProvider } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Pagination, ConfigProvider, Spin } from 'antd';
 
 import PostBody from '../../PostBody/PostBody';
+import BlogService from '../../../services/blogService';
 
 import s from './FeedPage.module.scss';
 
+const BlogApi = new BlogService();
+
 const FeedPage = () => {
+  const [page, setPage] = useState(1);
+  const [posts, setPosts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const body = await BlogApi.getArticles(page);
+        console.log(body);
+        setPosts(body.articles.map((article) => <PostBody key={article.slug} slug={article.slug} />));
+        setLoaded(true);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+
+    fetchArticles();
+  }, [ page ]);
+
+  console.log(posts);
+  
+  if (!loaded || posts.length === 0) {
+    return <Spin />;
+  }
+
   return (
     <div className={s.ListPage}>
       <ul className={s.list}>
-        <PostBody />
-        <PostBody />
-        <PostBody />
-        <PostBody />
-        <PostBody />
+        {posts}
       </ul>
       <ConfigProvider
         theme={{
@@ -30,7 +54,7 @@ const FeedPage = () => {
           },
         }}
       >
-        <Pagination defaultCurrent={1} pageSize={5} total={1700 / 5} showSizeChanger={false} />
+        <Pagination defaultCurrent={1} current={page} pageSize={5} total={1700 / 5} showSizeChanger={false} onChange={(e) => setPage(e)}/>
       </ConfigProvider>
     </div>
   );
