@@ -9,7 +9,7 @@ const Header = () => {
   const [loged, SetLoged] = useState(false);
   return (
     <div className={h.HeaderBase}>
-      <Link to='/feed' ><span>Realworld Blog</span></Link>
+      <Link to='/articles' ><span>Realworld Blog</span></Link>
       <div className={h.HeaderBtnGroup}>
         {loged ? (
           <div className={loged ? [h.HeaderBtnGroup, h.LogedBtn].join(' ') : h.HeaderBtnGroup}>

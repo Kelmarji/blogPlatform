@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Spin } from 'antd';
+import { Link } from 'react-router-dom';
 
 import BlogService from '../../services/blogService';
 
@@ -55,7 +56,9 @@ const PostBody = ({ slug }) => {
       <div className={s.HeaderItem}>
         <div className={s.HeaderTitle}>
           <div className={s.HeaderLeft}>
-            <h2>{title}</h2>
+            <Link style={{textDecoration: 'none'}} key={slug} to={`/articles/${slug}`}>
+              <h2>{title}</h2>
+            </Link>
             <label className={favorited ? s.LikeCounterCheked : s.LikeCounterUncheked} htmlFor={id}>
               <span>{favoritedCount > 0 ? favoritedCount : 0}</span>
             </label>

@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from 'react';
 import { Spin, Typography } from 'antd';
 import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 import BlogService from '../../services/blogService';
 
@@ -14,6 +16,7 @@ const { Text } = Typography;
 const tager = (arr) => arr.map((item,index) => item !== '' ? <li key={index} className={s.tag}>{item}</li> : null);
 
 const SelectedPost = ({slug}) => {
+  console.log(useParams());
   const [postName] = useState(slug);
   const [loaded, setLoaded] = useState(false);
   const [post, setPost] = useState({});
@@ -86,7 +89,7 @@ const SelectedPost = ({slug}) => {
           </span>
         </div>
         <div style={{marginTop: '20px'}}>
-          <Text>{body}</Text>
+          <Text><ReactMarkdown>{body}</ReactMarkdown></Text>
         </div>
       </li>
     );

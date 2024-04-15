@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 
 import Header from '../Header';
 import CreateProfilePage from '../Pages/CreateProfilePage';
@@ -18,8 +18,8 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<FeedPage />} />
-        <Route path='/feed' exact element={<FeedPage />} />
-        <Route path='/feed/:slug' element={<SelectedPost slug={'problematika-nizhnego-belya-v-stranah-sng-2hhk0n'} />} />
+        <Route path='/articles' exact element={<FeedPage />} />
+        <Route path='/articles/:slug' element={<RenderSelectedPost />} />
         <Route path="/create" element={<CreateArticle />} />
         <Route path="/newuser" element={<CreateProfilePage />} />
         <Route path="/login" element={<SignInPage />} />
@@ -29,5 +29,11 @@ const App = () => {
     </div>
   );
 };
+
+const RenderSelectedPost = () => {
+  const { slug } = useParams();
+  return <SelectedPost slug={slug} />;
+};
+
 
 export default App;
