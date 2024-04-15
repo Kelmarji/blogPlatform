@@ -8,6 +8,7 @@ import FeedPage from '../Pages/FeedPage';
 import SignInPage from '../Pages/SignInPage';
 import CreateArticle from '../Pages/CreateArticle';
 import SelectedPost from '../SelectedPost';
+import EditProfilePage from '../Pages/EditProfilePage';
 
 import A from './App.module.scss';
 
@@ -21,8 +22,9 @@ const App = () => {
         <Route path='/articles' exact element={<FeedPage />} />
         <Route path='/articles/:slug' element={<RenderSelectedPost />} />
         <Route path="/create" element={<CreateArticle />} />
-        <Route path="/newuser" element={<CreateProfilePage />} />
-        <Route path="/login" element={<SignInPage />} />
+        <Route path="/sign-up" element={<CreateProfilePage />} />
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/profile" element={<EditProfilePage />} />
         <Route path="*" element={<FeedPage />} />
       </Routes> 
       <h1>{msg}</h1>

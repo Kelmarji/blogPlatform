@@ -21,8 +21,8 @@ const Header = () => {
           </div>
         ) : (
           <div className={h.HeaderBtnGroup}>
-            <Link to="/login" className={h.HeaderBtn} onClick={() => SetLoged(false)}>Sign in</Link>
-            <Link to="/newuser" className={[h.HeaderBtn, h.signUp].join(' ')}>Sing up</Link>
+            <Link to="/sign-in" className={h.HeaderBtn} onClick={() => SetLoged(false)}>Sign in</Link>
+            <Link to="/sign-up" className={[h.HeaderBtn, h.signUp].join(' ')}>Sing up</Link>
           </div>
         )}
       </div>
