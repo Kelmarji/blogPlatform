@@ -18,8 +18,8 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<FeedPage />} />
-        <Route path='/feed' element={<FeedPage />} />
-        <Route path='/feed/:id' element={<SelectedPost />} />
+        <Route path='/feed' exact element={<FeedPage />} />
+        <Route path='/feed/:slug' element={<SelectedPost slug={'problematika-nizhnego-belya-v-stranah-sng-2hhk0n'} />} />
         <Route path="/create" element={<CreateArticle />} />
         <Route path="/newuser" element={<CreateProfilePage />} />
         <Route path="/login" element={<SignInPage />} />

@@ -11,6 +11,7 @@ const BlogApi = new BlogService();
 const FeedPage = () => {
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState([]);
+  const [postCount, setPostCount] = useState(5);
   const [loaded, setLoaded] = useState(false);
   
   useEffect(() => {
@@ -18,6 +19,7 @@ const FeedPage = () => {
       try {
         const body = await BlogApi.getArticles(page);
         console.log(body);
+        setPostCount(Math.floor(body.articlesCount / 5));
         setPosts(body.articles.map((article) => <PostBody key={article.slug} slug={article.slug} />));
         setLoaded(true);
       } catch (error) {
@@ -28,7 +30,7 @@ const FeedPage = () => {
     fetchArticles();
   }, [ page ]);
 
-  console.log(posts);
+  console.log(postCount);
   
   if (!loaded || posts.length === 0) {
     return <Spin />;
@@ -54,7 +56,7 @@ const FeedPage = () => {
           },
         }}
       >
-        <Pagination defaultCurrent={1} current={page} pageSize={5} total={1700 / 5} showSizeChanger={false} onChange={(e) => setPage(e)}/>
+        <Pagination defaultCurrent={1} current={page} pageSize={5} total={postCount} showSizeChanger={false} onChange={(e) => setPage(e)}/>
       </ConfigProvider>
     </div>
   );
