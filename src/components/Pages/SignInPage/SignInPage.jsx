@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import s from './SingInPage.module.scss';
 
 const SignInPage = () => {
-  console.log(localStorage);
 
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
