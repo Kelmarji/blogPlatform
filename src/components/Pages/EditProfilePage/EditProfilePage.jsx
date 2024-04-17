@@ -59,7 +59,7 @@ const EditProfilePage = () => {
             },
           })}
         />
-
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.url_avatar && <p style={{margin: '0'}}>{errors.url_avatar.message}</p>}</div>
       </div>
       <input type="submit" className={s.CreateBtn} value='Save' />
     </form>
