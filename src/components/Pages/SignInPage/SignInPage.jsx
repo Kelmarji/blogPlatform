@@ -1,35 +1,57 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import s from './SingInPage.module.scss';
 
 const SignInPage = () => {
+  console.log(localStorage);
+
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
+  const {register, formState: {errors}, handleSubmit} = useForm({mode:'onBlur'});
+
+  const onSubmit = (data) => {
+    console.log(data);
+    alert(JSON.stringify(data));
+  };
+
   return (
-    <form className={s.CreateProfilePageBase}>
+    <form className={s.CreateProfilePageBase} onSubmit={handleSubmit(onSubmit)}>
       <h3>Sign In</h3>
       <div className={s.inputField}>
-        <span>Email Address</span>
-        <input required placeholder="Email Address" type="text" onChange={(e) => setUsername(e.target.value)}></input>
+        <span>Email address</span>
+        <input placeholder="Email adress" type="email" 
+          {...register('email', {
+            required: 'обязательное поле',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'неверный формат адреса электронной почты',
+            },
+          })}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.email && <p style={{margin: '0'}}>{errors.email.message}</p>}</div>
       </div>
       <div className={s.inputField}>
         <span>Password</span>
-        <input placeholder="Password" type="password" onChange={(e) => setPass(e.target.value)}></input>
+        <input 
+          placeholder="Password" type="password"
+          {...register('password', {
+            required: 'обязательное поле',
+            minLength: {value: 6, message: 'минимум 6 символов'},
+            maxLength: {value: 40, message: 'максимум 40 символов'},
+          })
+          }
+          
+          onChange={(e) => setPass(e.target.value)}
+        />
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.password && <p style={{margin: '0'}}>от 6 до 40 символов</p>}</div>
       </div>
-      <button
-        className={username.length > 0 ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')}
-        disabled={!(username.length > 0)}
-        onClick={(e) => {
-          e.preventDefault();
-          console.log(username, pass);
-        }}
-      >
-        Create
-      </button>
+      <input type="submit" disabled={!username} className={username.length > 0 && pass.length > 0 ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')} value={'Create'} />
       <span>
         Don&apos;t have an account?{' '}
-        <Link to='/newuser' className={s.SignIn}>
+        <Link to='/sign-up' className={s.SignIn}>
           {' '}
           Sign Up
         </Link>

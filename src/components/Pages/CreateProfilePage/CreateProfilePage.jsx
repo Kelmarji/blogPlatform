@@ -1,45 +1,79 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import s from './CreateProfile.module.scss';
 
 const CreateProfilePage = () => {
-  const [privacy, setPrivacy] = useState(false);
+  const {register, formState: {errors}, handleSubmit} = useForm({mode:'onBlur'});
+  const [privacy, setPrivacy] = useState(true);
+  const [pass, setPass] = useState('');
+  const [repPass, setRepPass] = useState('');
+
+
+  const onSubmit = (data) => {
+    if (pass !== repPass) {
+      alert('Passwords do not match');
+      return;
+    }
+    console.log(data);
+    alert(JSON.stringify(data));
+  };
+
   return (
-    <form className={s.CreateProfilePageBase}>
+    <form className={s.CreateProfilePageBase} onSubmit={handleSubmit(onSubmit)}>
       <h3>Create new account</h3>
       <div className={s.inputField}>
         <span>Username</span>
-        <input required placeholder="Username" type="text"></input>
+        <input placeholder="Username" type="text" 
+          {...register('userName', {
+            required: 'обязательное поле',
+            minLength: {value: 3, message: 'минимум 3 символа'},
+            maxLength: {value: 20, message: 'максимум 20 символов'},
+          })}
+        />
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.userName && <p style={{margin: '0'}}>от 3 до 20 символов</p>}</div>
       </div>
       <div className={s.inputField}>
         <span>Email address</span>
-        <input placeholder="Email adress" type="email"></input>
+        <input placeholder="Email adress" type="email" 
+          {...register('email', {
+            required: 'обязательное поле',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'неверный формат адреса электронной почты',
+            },
+          })}
+        />
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.email && <p style={{margin: '0'}}>{errors.email.message}</p>}</div>
       </div>
       <div className={s.inputField}>
         <span>Password</span>
-        <input placeholder="Password" type="text"></input>
+        <input 
+          placeholder="Password" type="password"
+          {...register('password', {
+            required: 'обязательное поле',
+            minLength: {value: 6, message: 'минимум 6 символов'},
+            maxLength: {value: 40, message: 'максимум 40 символов'},
+          })
+          }
+          
+          onChange={(e) => setPass(e.target.value)}
+        />
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.password && <p style={{margin: '0'}}>от 6 до 40 символов</p>}</div>
       </div>
       <div className={s.inputField}>
         <span>Repeat password</span>
-        <input placeholder="Repeat password" type="text"></input>
+        <input placeholder="Repeat password" type="password" onChange={(e) => setRepPass(e.target.value)}></input>
+        <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{pass !== repPass ? <p style={{margin: '0'}}>пароли не совпадают</p> : null}</div>
       </div>
       <label className={s.inputAgree}>
-        <input type="checkbox" onChange={(e) => setPrivacy(e.target.checked)}></input>
+        <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}></input>
         <span>I agree to the processing of my personal information</span>
       </label>
-      <button
-        className={privacy ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')}
-        disabled={!privacy}
-        onClick={(e) => {
-          e.preventDefault();
-          console.log(privacy);
-        }}
-      >
-        Create
-      </button>
+      <input type="submit" disabled={!privacy} className={privacy ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')} value={'Create'} /> 
       <span>
-        Already have account? <Link to='/login' className={s.SignIn}>Sign In</Link>.
+        Already have account? <Link to='/sign-in' className={s.SignIn}>Sign In</Link>.
       </span>
     </form>
   );

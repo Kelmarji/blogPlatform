@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import s from './EditProfile.module.scss';
 
 const EditProfilePage = () => {
-  const [privacy] = useState(true);
   return (
     <form className={s.CreateProfilePageBase}>
       <h3>edit you profile</h3>
@@ -24,11 +23,9 @@ const EditProfilePage = () => {
         <input placeholder="url avatar" type="text"></input>
       </div>
       <button
-        className={privacy ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')}
-        disabled={!privacy}
+        className={s.CreateBtn}
         onClick={(e) => {
           e.preventDefault();
-          console.log(privacy);
         }}
       >
         Save
