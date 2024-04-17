@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
+import BlogService from '../../../services/blogService';
+
 import s from './SingInPage.module.scss';
+
+
+const blogApi = new BlogService(); 
 
 const SignInPage = () => {
 
@@ -12,6 +17,7 @@ const SignInPage = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    blogApi.login(data);
     alert(JSON.stringify(data));
   };
 
@@ -47,7 +53,7 @@ const SignInPage = () => {
         />
         <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.password && <p style={{margin: '0'}}>от 6 до 40 символов</p>}</div>
       </div>
-      <input type="submit" disabled={!username} className={username.length > 0 && pass.length > 0 ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')} value={'Create'} />
+      <input type="submit" disabled={!username} className={username.length > 0 && pass.length > 0 ? s.CreateBtn : [s.CreateBtn, s.CreateBtnDisabled].join(' ')} value={'Login'} />
       <span>
         Don&apos;t have an account?{' '}
         <Link to='/sign-up' className={s.SignIn}>

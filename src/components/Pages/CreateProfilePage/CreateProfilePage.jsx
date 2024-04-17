@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
+import BlogService from '../../../services/blogService';
+
 import s from './CreateProfile.module.scss';
+
+
+const blogApi = new BlogService(); 
 
 const CreateProfilePage = () => {
   const {register, formState: {errors}, handleSubmit} = useForm({mode:'onBlur'});
@@ -17,7 +22,7 @@ const CreateProfilePage = () => {
       return;
     }
     console.log(data);
-    alert(JSON.stringify(data));
+    blogApi.register(data);
   };
 
   return (
@@ -26,7 +31,7 @@ const CreateProfilePage = () => {
       <div className={s.inputField}>
         <span>Username</span>
         <input placeholder="Username" type="text" 
-          {...register('userName', {
+          {...register('username', {
             required: 'обязательное поле',
             minLength: {value: 3, message: 'минимум 3 символа'},
             maxLength: {value: 20, message: 'максимум 20 символов'},
