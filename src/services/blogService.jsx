@@ -65,10 +65,12 @@ export default class BlogService {
       }),
     };
 
-    fetch(`${this.url}users/login`, postOptions)
+    const out = fetch(`${this.url}users/login`, postOptions)
       .then((response) => response.json())
-      .then((res) => console.log(res))
+      .then((res) => res)
       .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+
+    return out;
   }
 
   // info about Person
@@ -80,12 +82,41 @@ export default class BlogService {
       },
     };
   
-    fetch(`${this.url}user`, getOptions)
+    const out = fetch(`${this.url}user`, getOptions)
       .then((response) => response.json())
-      .then((res) => console.log(res))
+      .then((res) => res)
       .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+
+    return out;
   }
 
+  // upd user testing@mail.ru 123456
+  async updUser(data, token) {
+    const { email, password, username, image } = data;
+    const postOptions = {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Token ${token}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        user: {
+          username,
+          email,
+          password,
+          image
+        }
+      }),
+    };
+
+    const out = fetch(`${this.url}user`, postOptions)
+      .then((response) => response.json())
+      .then((res) => res)
+      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+
+    return out;
+  }
 };
 
 

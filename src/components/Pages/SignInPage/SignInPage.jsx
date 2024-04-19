@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import BlogService from '../../../services/blogService';
 
@@ -10,15 +11,28 @@ import s from './SingInPage.module.scss';
 const blogApi = new BlogService(); 
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const dispLog = (txt) => {
+    const type = 'setToken';
+    dispatch({ type, payload:txt });
+  };
 
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   const {register, formState: {errors}, handleSubmit} = useForm({mode:'onBlur'});
 
-  const onSubmit = (data) => {
-    console.log(data);
-    blogApi.login(data);
-    alert(JSON.stringify(data));
+  const onSubmit = async (data) => {
+    const token = await blogApi.login(data);
+    localStorage.setItem('logedToken', token.user.token);
+    dispLog(token.user.token);
+    navigate('/feed');
+  };
+
+  if(localStorage.logedToken) {
+    if (localStorage.logedToken.length > 0) {
+      navigate('/feed');
+    };
   };
 
   return (

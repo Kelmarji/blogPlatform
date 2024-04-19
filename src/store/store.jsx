@@ -15,11 +15,22 @@ const loggerMiddleware = (store) => (next) => (action) => {
 };
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
+let token = '';
+
+if (localStorage.logedToken) {
+  if (localStorage.logedToken.length > 0) {
+    token = localStorage.logedToken;
+  }
+}
+
 const defaultState = {
+  token,
   message: 'Yes, you can',
 };
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
+    case 'setToken': return {...state, token: action.payload};
+    case 'logout': return {...state, token: ''};
     default:
       return state;
   }

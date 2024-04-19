@@ -13,7 +13,7 @@ import EditProfilePage from '../Pages/EditProfilePage';
 import A from './App.module.scss';
 
 const App = () => {
-  const msg = useSelector((state) => state.message);
+  const token = useSelector((state) => state.token);
   return (
     <div className={A.App}>
       <Header />
@@ -21,13 +21,12 @@ const App = () => {
         <Route path="/" element={<FeedPage />} />
         <Route path='/articles' exact element={<FeedPage />} />
         <Route path='/articles/:slug' element={<RenderSelectedPost />} />
-        <Route path="/create" element={<CreateArticle />} />
-        <Route path="/sign-up" element={<CreateProfilePage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/profile" element={<EditProfilePage />} />
+        <Route path="/create" element={token ? <CreateArticle /> : <FeedPage />} />
+        <Route path="/sign-up" element={!token ? <CreateProfilePage /> : <FeedPage />} />
+        <Route path="/sign-in" element={!token ? <SignInPage /> : <FeedPage />} />
+        <Route path="/profile" element={token ? <EditProfilePage /> : <FeedPage />} />
         <Route path="*" element={<FeedPage />} />
-      </Routes> 
-      <h1>{msg}</h1>
+      </Routes>
     </div>
   );
 };
