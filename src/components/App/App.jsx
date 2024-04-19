@@ -13,6 +13,10 @@ import EditProfilePage from '../Pages/EditProfilePage';
 import A from './App.module.scss';
 
 const App = () => {
+  const RenderSelectedPost = () => {
+    const { slug } = useParams();
+    return <SelectedPost slug={slug} />;
+  };
   const token = useSelector((state) => state.token);
   return (
     <div className={A.App}>
@@ -21,7 +25,7 @@ const App = () => {
         <Route path="/" element={<FeedPage />} />
         <Route path='/articles' exact element={<FeedPage />} />
         <Route path='/articles/:slug' element={<RenderSelectedPost />} />
-        <Route path="/create" element={token ? <CreateArticle /> : <FeedPage />} />
+        <Route path="/new-article" element={token ? <CreateArticle /> : <FeedPage />} />
         <Route path="/sign-up" element={!token ? <CreateProfilePage /> : <FeedPage />} />
         <Route path="/sign-in" element={!token ? <SignInPage /> : <FeedPage />} />
         <Route path="/profile" element={token ? <EditProfilePage /> : <FeedPage />} />
@@ -30,11 +34,5 @@ const App = () => {
     </div>
   );
 };
-
-const RenderSelectedPost = () => {
-  const { slug } = useParams();
-  return <SelectedPost slug={slug} />;
-};
-
 
 export default App;

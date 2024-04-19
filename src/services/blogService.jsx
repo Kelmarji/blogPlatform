@@ -1,4 +1,3 @@
-
 export default class BlogService {
   url = 'https://blog.kata.academy/api/';
 
@@ -90,10 +89,15 @@ export default class BlogService {
     return out;
   }
 
-  // upd user testing@mail.ru 123456
+  // upd user test@ya.ru 123456
   async updUser(data, token) {
     const { email, password, username, image } = data;
-    const postOptions = {
+    const user = {};
+    if (email) user.email = email;
+    if (password) user.password = password;
+    if (username) user.username = username;
+    if (image) user.image = image;
+    const putOptions = {
       method: 'PUT',
       headers: {
         'Authorization': `Token ${token}`,
@@ -101,18 +105,13 @@ export default class BlogService {
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        user: {
-          username,
-          email,
-          password,
-          image
-        }
+        user
       }),
     };
 
-    const out = fetch(`${this.url}user`, postOptions)
+    const out = fetch(`${this.url}user`, putOptions)
       .then((response) => response.json())
-      .then((res) => res)
+      .then((res) => console.log(res))
       .catch((err) => console.error(err.message)); // Log error messages for better understanding.
 
     return out;

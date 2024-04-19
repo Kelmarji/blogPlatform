@@ -15,6 +15,7 @@ const Header = () => {
   const token = useSelector((state) => state.token);
   const [loged, SetLoged] = useState(false);
   const [name, setName] = useState('jony poe');
+  const [avatar, setAvatar] = useState(Ava);
 
   const logOut = () => {
     dispatch({type:'logout'});
@@ -32,9 +33,14 @@ const Header = () => {
   }, [token]);
 
   useEffect( () => {
-    if (loged) blogApi.getLoged(token).then((res) => setName(res.user.username));
+    if (loged) blogApi.getLoged(token).then((res) => {
+      setName(res.user.username);
+      setAvatar(res.user.image);
+    });
     if (!loged) setName('jonh poe');
   }, [loged]);
+
+  blogApi.getLoged(token).then((res) => console.log(res));
 
   return (
     <div className={h.HeaderBase}>
@@ -42,10 +48,10 @@ const Header = () => {
       <div className={h.HeaderBtnGroup}>
         {loged ? (
           <div className={loged ? [h.HeaderBtnGroup, h.LogedBtn].join(' ') : h.HeaderBtnGroup}>
-            <Link to="/create" className={[h.HeaderBtn, h.signUp, h.CreateBtn].join(' ')} >Create Article</Link>
-            <Link to="/profile" style={{display:'flex', gap: '5px'}}>
+            <Link to="/new-article" className={[h.HeaderBtn, h.signUp, h.CreateBtn].join(' ')} >Create Article</Link>
+            <Link to="/profile" style={{display:'flex', gap: '10px'}}>
               <span>{name}</span>
-              <img src={Ava} />
+              <img style={{width: '46px', height: '46px',borderRadius: '100%', border: '1px solid black'}} src={avatar} />
             </Link>
 
             <button className={[h.HeaderBtn, h.LogoutBtn].join(' ')} onClick={logOut}>Log out</button>
