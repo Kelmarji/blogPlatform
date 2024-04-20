@@ -1,53 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Typography, Flex, Input, Button } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Card, Typography, Flex, Button } from 'antd';
+import { useForm } from 'react-hook-form';
 
 import t from './CreateArticle.module.scss';
+import Tags from './Tags';
 
 const { Title, Text } = Typography;
 
-const Tags = ({ key , id}) => {
-  console.log(key, id);
-  return (
-    <div key={key}>
-      <Flex justify="flex-start" gap="10px">
-        <Input placeholder='Tag' style={{ width: '100%' }} />
-        <Button danger onClick={() => console.log(id)}>Delete</Button>
-      </Flex>
-    </div>
-  );
-};
+
 
 const CreateArticle = () => {
-  const [tagsCount, setTagsCount] = useState(1)
-  const [tags, setTags] = useState([<Tags key={tagsCount} />]);
+  const [tagCounter, setTagCounter] = useState(0);
+  const [tags, setTags] = useState([]);
+  const {register, formState: {errors}, handleSubmit, unregister} = useForm({mode:'onBlur'});
 
-  const newTag = () => {
-    setTagsCount((count) => count + 1);
-    const newTags = [...tags, <Tags key={tagsCount + 1} id={tagsCount} />];
+
+
+  const onDeleted = useCallback((id) => {
+    setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+    unregister(`tags[${id}]`);
+  }, [tags, unregister]);
+
+  const newTager = () => {
+    console.log(tags);
+    const newTags = [...tags, { key: tagCounter + 1, id: tagCounter + 1, onDeleted, register }];
     setTags(newTags);
-  }
+    setTagCounter((count) => count + 1);
+  };
 
-  useEffect(() => {}
-    , [tags])
+  useEffect(() => {
+    console.log(tags);
+  }, [tags] );
+
+  const onSubmit = (data) => {
+    console.log(data);
+    let newTags = [];
+    if (data.tags) {
+      if (data.tags.length > 0)
+        newTags = data.tags.filter((item) => item.length > 0);
+    }
+    alert(JSON.stringify({...data, tags: newTags}));
+  };
+
+
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
       <Title style={{ textAlign: 'center' }} level={2}>Create new article</Title>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)} >
         <Flex vertical={'vertical'} gap={'10px'}>
           <Text style={{ fontWeight: '500' }}>Title</Text>
-          <Input placeholder='Title' />
-          <Text style={{ fontWeight: '500' }}>Short description</Text>
-          <Input placeholder='Short description' />
-          <Text style={{ fontWeight: '500' }}>Text</Text>
-          <Input.TextArea
-            showCount
-            placeholder="Text"
-            style={{ height: 168, resize: 'none' }}
+          <input type="text" className={t.customInput} placeholder='Title'
+            {...register('title', {
+              required: 'обязательное поле',
+            })}
           />
+          <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.title && <p style={{margin: '0'}}>{errors.title.message}</p>}</div>
+          <Text style={{ fontWeight: '500' }}>Short description</Text>
+          <input className={t.customInput} placeholder='Short description'
+            {...register('description', {
+              required: 'обязательное поле',
+            })}
+          />
+          <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.desc && <p style={{margin: '0'}}>{errors.desc.message}</p>}</div>
+          <Text style={{ fontWeight: '500' }}>Text</Text>
+          <textarea type="text" className={t.customInput}
+            placeholder="Text"
+            style={{ height: 168, resize: 'none'}}
+            {...register('body', {
+              required: 'обязательное поле',
+            })}
+          />
+          <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.body && <p style={{margin: '0'}}>{errors.body.message}</p>}</div>   
           <Text style={{ fontWeight: '500' }}>Tags</Text>
           <Flex gap='10px'>
-          <Flex vertical={true} gap="10px">{tags.length > 0 ? [...tags] : null}</Flex>
-          <Flex align='flex-end' justify='flex-end'><Button type='primary' ghost onClick={newTag}>Add Tag</Button></Flex>
+            <Flex vertical={true} gap="10px">{tags.length > 0 ? 
+              tags.map((item) => {
+                console.log(item);
+                return <Tags key={item.key} id={item.id} onDeleted={item.onDeleted} register={item.register} />;
+              })
+              :
+              null}</Flex>
+            <Flex align='flex-end' justify='flex-end'><Button type='primary' ghost onClick={newTager}>Add Tag</Button></Flex>
           </Flex>          
           <input type='submit' className={t.sendBtn} value={'Send'} />
         </Flex>
@@ -57,3 +90,8 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
+
+/* 
+Добавьте страницу создания статьи. Правила валидации - title, short description и text обязательны для заполнения.
+*/
+
