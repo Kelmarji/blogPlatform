@@ -1,3 +1,4 @@
-import CreateArticle from './CreateArticle';
+import EditArticle from './EditArticle';
 
-export default CreateArticle;
+
+export default EditArticle;

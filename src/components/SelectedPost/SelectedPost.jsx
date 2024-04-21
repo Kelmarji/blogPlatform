@@ -98,7 +98,13 @@ const SelectedPost = ({ slug }) => {
               >
                 Delete
               </button>
-              <button>Edit</button>
+              <button
+                onClick={() => {
+                  setTimeout(() => navigate(`/articles/${slug}/edit`), 500);
+                }}
+              >
+              Edit
+              </button>
             </Flex>
           ) : null}
         </Flex>

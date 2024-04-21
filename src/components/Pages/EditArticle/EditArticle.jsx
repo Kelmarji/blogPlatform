@@ -2,21 +2,37 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Card, Typography, Flex, Button } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import Tags from '../../SelectedPost';
 import BlogService from '../../../services/blogService';
 
 import t from './EditArticle.module.scss';
-import Tags from '../CreateArticle';
 
 const { Title, Text } = Typography;
 const blogApi = new BlogService();
 
 
-const EditArticle = ({slug}) => {
+const EditArticle = () => {
+  const sl = useParams();
+  const {slug} = sl;
+  const [namePost, setNamePost] = useState('');
+  const [short, setShort] = useState('');
+  const [text, setText] = useState('');
+  const [tags, setTags] = useState([]);
+  useEffect(() => {
+    blogApi.getOneArticles(slug)
+      .then((res) => {
+        const {title , description , body, tagList} = res.article;
+        setNamePost(title);
+        setShort(description);
+        setText(body);
+        setTags(tagList);
+      });
+  }, []);
+
   const token = useSelector((state) => state.token);
   const [tagCounter, setTagCounter] = useState(0);
-  const [tags, setTags] = useState([]);
   const {register, formState: {errors}, handleSubmit, unregister} = useForm({mode:'onBlur'});
   const navigate = useNavigate();
 
@@ -46,33 +62,35 @@ const EditArticle = ({slug}) => {
     setTimeout(() => navigate('/articles'), 500);
   };
 
-
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
       <Title style={{ textAlign: 'center' }} level={2}>Create new article</Title>
       <form onSubmit={handleSubmit(onSubmit)} >
         <Flex vertical={'vertical'} gap={'10px'}>
           <Text style={{ fontWeight: '500' }}>Title</Text>
-          <input type="text" className={t.customInput} placeholder='Title'
+          <input value={namePost} type="text" className={t.customInput} placeholder='Title'
             {...register('title', {
               required: 'обязательное поле',
             })}
+            onChange={(e) => setNamePost(e.target.value)}
           />
           <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.title && <p style={{margin: '0'}}>{errors.title.message}</p>}</div>
           <Text style={{ fontWeight: '500' }}>Short description</Text>
-          <input className={t.customInput} placeholder='Short description'
+          <input value={short} className={t.customInput} placeholder='Short description'
             {...register('description', {
               required: 'обязательное поле',
             })}
+            onChange={(e) => setShort(e.target.value)}
           />
           <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.desc && <p style={{margin: '0'}}>{errors.desc.message}</p>}</div>
           <Text style={{ fontWeight: '500' }}>Text</Text>
-          <textarea type="text" className={t.customInput}
+          <textarea value={text} type="text" className={t.customInput}
             placeholder="Text"
             style={{ height: 168, resize: 'none'}}
             {...register('body', {
               required: 'обязательное поле',
             })}
+            onChange={(e) => setText(e.target.value)}
           />
           <div style={{height:'30', color:'tomato', marginTop: '5px'}}>{errors?.body && <p style={{margin: '0'}}>{errors.body.message}</p>}</div>   
           <Text style={{ fontWeight: '500' }}>Tags</Text>
@@ -92,7 +110,7 @@ const EditArticle = ({slug}) => {
   );
 };
 
-export default EditArticleArticle;
+export default EditArticle;
 
 /* 
 Добавьте страницу создания статьи. Правила валидации - title, short description и text обязательны для заполнения.
