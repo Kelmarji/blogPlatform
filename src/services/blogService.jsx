@@ -11,14 +11,19 @@ export default class BlogService {
 
   // 1 article
   async getOneArticles (slug) {
-    const res = await fetch(`${this.url}/articles/${slug}`)
+    const getOptions = {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${localStorage.logedToken}`,
+      },
+    };
+    const res = await fetch(`${this.url}/articles/${slug}`, getOptions )
       .then((body) => body.json())
       .catch((e) => {
         console.log(e);
         throw new Error('OHAE');
       });
     if (res.status === 404) throw new Error('не найдено');
-      
     return res;
   }
 
@@ -115,6 +120,48 @@ export default class BlogService {
       .catch((err) => console.error(err.message)); // Log error messages for better understanding.
 
     return out;
+  }
+
+  async createArticle(data, token) {
+    const { title, description, body, tags } = data;
+    const article = {title, description, body};
+    if (tags.length > 0) article.tagList = tags;
+    const putOptions = {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${token}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        article
+      }),
+    };
+
+    const out = fetch(`${this.url}articles`, putOptions)
+      .then((response) => response.json())
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+
+    return out;
+  }
+
+  async deletePost(token, slug) {
+    const putOptions = {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Token ${token}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: '',
+    };
+    
+    fetch(`${this.url}articles/${slug}`, putOptions)
+      .then((response) =>{
+        if (response.ok) console.log('успешно удалено');
+      })
+      .catch((err) => console.error(err.message));
   }
 };
 

@@ -11,7 +11,7 @@ import s from './FeedPage.module.scss';
 const BlogApi = new BlogService();
 
 const FeedPage = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [posts, setPosts] = useState([]);
   const [postCount, setPostCount] = useState(5);
   const [loaded, setLoaded] = useState(false);

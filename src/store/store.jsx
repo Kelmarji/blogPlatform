@@ -26,11 +26,16 @@ if (localStorage.logedToken) {
 const defaultState = {
   token,
   message: 'Yes, you can',
+  name: '',
 };
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case 'setToken': return {...state, token: action.payload};
-    case 'logout': return {...state, token: ''};
+    case 'setToken':
+      return { ...state, token: action.payload };
+    case 'logout':
+      return { ...state, token: '' };
+    case 'setName':
+      return { ...state, name: action.payload };
     default:
       return state;
   }

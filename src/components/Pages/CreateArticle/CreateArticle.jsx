@@ -1,15 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card, Typography, Flex, Button } from 'antd';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
+import BlogService from '../../../services/blogService';
 
 import t from './CreateArticle.module.scss';
 import Tags from './Tags';
 
 const { Title, Text } = Typography;
-
+const blogApi = new BlogService();
 
 
 const CreateArticle = () => {
+  const token = useSelector((state) => state.token);
   const [tagCounter, setTagCounter] = useState(0);
   const [tags, setTags] = useState([]);
   const {register, formState: {errors}, handleSubmit, unregister} = useForm({mode:'onBlur'});
@@ -29,7 +33,6 @@ const CreateArticle = () => {
   };
 
   useEffect(() => {
-    console.log(tags);
   }, [tags] );
 
   const onSubmit = (data) => {
@@ -39,7 +42,7 @@ const CreateArticle = () => {
       if (data.tags.length > 0)
         newTags = data.tags.filter((item) => item.length > 0);
     }
-    alert(JSON.stringify({...data, tags: newTags}));
+    blogApi.createArticle({...data, tags: newTags}, token, blogApi);
   };
 
 
@@ -75,7 +78,6 @@ const CreateArticle = () => {
           <Flex gap='10px'>
             <Flex vertical={true} gap="10px">{tags.length > 0 ? 
               tags.map((item) => {
-                console.log(item);
                 return <Tags key={item.key} id={item.id} onDeleted={item.onDeleted} register={item.register} />;
               })
               :
