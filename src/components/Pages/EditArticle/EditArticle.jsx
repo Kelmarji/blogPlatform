@@ -6,21 +6,19 @@ import { useNavigate } from 'react-router-dom';
 
 import BlogService from '../../../services/blogService';
 
-import t from './CreateArticle.module.scss';
-import Tags from './Tags';
+import t from './EditArticle.module.scss';
+import Tags from '../CreateArticle';
 
 const { Title, Text } = Typography;
 const blogApi = new BlogService();
 
 
-const CreateArticle = () => {
+const EditArticle = ({slug}) => {
   const token = useSelector((state) => state.token);
   const [tagCounter, setTagCounter] = useState(0);
   const [tags, setTags] = useState([]);
   const {register, formState: {errors}, handleSubmit, unregister} = useForm({mode:'onBlur'});
   const navigate = useNavigate();
-
-
 
   const onDeleted = useCallback((id) => {
     setTags(prevTags => prevTags.filter(tag => tag.id !== id));
@@ -44,7 +42,7 @@ const CreateArticle = () => {
       if (data.tags.length > 0)
         newTags = data.tags.filter((item) => item.length > 0);
     }
-    blogApi.createArticle({...data, tags: newTags}, token, blogApi);
+    blogApi.UPDARTICLE({...data, tags: newTags}, token, blogApi);
     setTimeout(() => navigate('/articles'), 500);
   };
 
@@ -87,14 +85,14 @@ const CreateArticle = () => {
               null}</Flex>
             <Flex align='flex-end' justify='flex-end'><Button type='primary' ghost onClick={newTager}>Add Tag</Button></Flex>
           </Flex>          
-          <input type='submit' className={t.sendBtn} value={'Send'} />
+          <input type='submit' className={t.sendBtn} value={'Save'} />
         </Flex>
       </form>
     </Card>
   );
 };
 
-export default CreateArticle;
+export default EditArticleArticle;
 
 /* 
 Добавьте страницу создания статьи. Правила валидации - title, short description и text обязательны для заполнения.
