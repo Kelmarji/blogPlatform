@@ -2,22 +2,29 @@ export default class BlogService {
   url = 'https://blog.kata.academy/api/';
 
   // 5 articles
-  async getArticles (page, lim=5) {
+  async getArticles(page, lim = 5) {
+    const getOptions = {
+      method: 'GET',
+      headers: {
+        Authorization: `Token ${localStorage.logedToken}`,
+      },
+    };
     const offset = page * lim;
-    const res = await fetch(`${this.url}articles?favorited&offset=${offset}&limit=${lim}`)
-      .then((body) => body.json());
+    const res = await fetch(`${this.url}articles?favorited&offset=${offset}&limit=${lim}`, getOptions).then((body) =>
+      body.json()
+    );
     return res;
   }
 
   // 1 article
-  async getOneArticles (slug) {
+  async getOneArticles(slug) {
     const getOptions = {
       method: 'GET',
       headers: {
-        'Authorization': `Token ${localStorage.logedToken}`,
+        Authorization: `Token ${localStorage.logedToken}`,
       },
     };
-    const res = await fetch(`${this.url}/articles/${slug}`, getOptions )
+    const res = await fetch(`${this.url}/articles/${slug}`, getOptions)
       .then((body) => body.json())
       .catch((e) => {
         console.log(e);
@@ -41,8 +48,8 @@ export default class BlogService {
         user: {
           username,
           email,
-          password
-        }
+          password,
+        },
       }),
     };
 
@@ -64,8 +71,8 @@ export default class BlogService {
       body: JSON.stringify({
         user: {
           email,
-          password
-        }
+          password,
+        },
       }),
     };
 
@@ -82,10 +89,10 @@ export default class BlogService {
     const getOptions = {
       method: 'GET',
       headers: {
-        'Authorization': `Token ${token}`,
+        Authorization: `Token ${token}`,
       },
     };
-  
+
     const out = fetch(`${this.url}user`, getOptions)
       .then((response) => response.json())
       .then((res) => res)
@@ -105,12 +112,12 @@ export default class BlogService {
     const putOptions = {
       method: 'PUT',
       headers: {
-        'Authorization': `Token ${token}`,
+        Authorization: `Token ${token}`,
         accept: 'application/json',
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        user
+        user,
       }),
     };
 
@@ -124,17 +131,17 @@ export default class BlogService {
 
   async createArticle(data, token) {
     const { title, description, body, tags } = data;
-    const article = {title, description, body};
+    const article = { title, description, body };
     if (tags.length > 0) article.tagList = tags;
     const putOptions = {
       method: 'POST',
       headers: {
-        'Authorization': `Token ${token}`,
+        Authorization: `Token ${token}`,
         accept: 'application/json',
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        article
+        article,
       }),
     };
 
@@ -150,19 +157,17 @@ export default class BlogService {
     const putOptions = {
       method: 'DELETE',
       headers: {
-        'Authorization': `Token ${token}`,
+        Authorization: `Token ${token}`,
         accept: 'application/json',
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: '',
     };
-    
+
     fetch(`${this.url}articles/${slug}`, putOptions)
-      .then((response) =>{
+      .then((response) => {
         if (response.ok) console.log('успешно удалено');
       })
       .catch((err) => console.error(err.message));
   }
-};
-
-
+}
