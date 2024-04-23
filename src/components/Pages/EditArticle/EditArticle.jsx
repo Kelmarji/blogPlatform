@@ -98,6 +98,12 @@ const EditArticle = () => {
     setTimeout(() => navigate(`/articles/${slug}`), 500);
   };
 
+  if (!token) {
+    if (!token.length) {
+      navigate('/articles');
+    };
+  };
+
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
       <Title style={{ textAlign: 'center' }} level={2}>
@@ -152,16 +158,16 @@ const EditArticle = () => {
             <Flex vertical={true} gap="10px">
               {tags.length > 0
                 ? tags.map((item) => {
-                    return (
-                      <TagsEdit
-                        label={item.label}
-                        key={item.key}
-                        id={item.id}
-                        onDeleted={item.onDeleted}
-                        register={item.register}
-                      />
-                    );
-                  })
+                  return (
+                    <TagsEdit
+                      label={item.label}
+                      key={item.key}
+                      id={item.id}
+                      onDeleted={item.onDeleted}
+                      register={item.register}
+                    />
+                  );
+                })
                 : null}
             </Flex>
             <Flex align="flex-end" justify="flex-end">

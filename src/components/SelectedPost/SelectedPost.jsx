@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Spin, Typography } from 'antd';
+import { Button, Flex, Spin, Typography } from 'antd';
 import { format } from 'date-fns';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -23,6 +23,7 @@ const tager = (arr) =>
   );
 
 const SelectedPost = ({ slug }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const yourName = useSelector((state) => state.name);
   const token = useSelector((state) => state.token);
@@ -89,23 +90,36 @@ const SelectedPost = ({ slug }) => {
             <span className={s.DescPost}>{description}</span>
           </div>
           {isYourPost ? (
-            <Flex className={s.btns} gap="10px">
-              <button
-                onClick={() => {
-                  test.deletePost(token, slug);
-                  setTimeout(() => navigate('/feed'), 500);
-                }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  setTimeout(() => navigate(`/articles/${slug}/edit`), 500);
-                }}
-              >
-              Edit
-              </button>
-            </Flex>
+            <div>
+              <div className={!isOpen ? s.modal : [s.modal, s.isOpen].join(' ')}>
+                <Flex vertical justify="space-around" style={{height:'100%', padding: '0px 10px'}}>
+                  <span>Are you sure to delete this article?</span>
+                  <Flex justify='flex-end' gap="12px">
+                    <Button onClick={() => setIsOpen(false)}>No</Button>
+                    <Button type='primary'
+                      onClick={() => {
+                        test.deletePost(token, slug);
+                        setTimeout(() => navigate('/feed'), 500);
+                      }}
+                    >Yes</Button>
+                  </Flex>
+                </Flex>
+              </div>
+              <Flex className={s.btns} gap="10px">
+                <button
+                  onClick={() => setIsOpen(true)}
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setTimeout(() => navigate(`/articles/${slug}/edit`), 500);
+                  }}
+                >
+                  Edit
+                </button>
+              </Flex>
+            </div>
           ) : null}
         </Flex>
         <div style={{ marginTop: '20px' }}>

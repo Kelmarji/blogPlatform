@@ -178,7 +178,7 @@ export default class BlogService {
     return out;
   }
 
-// worked
+  // worked
   async deletePost(token, slug) {
     const putOptions = {
       method: 'DELETE',
