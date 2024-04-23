@@ -41,7 +41,7 @@ const EditArticle = () => {
   const [short, setShort] = useState('');
   const [text, setText] = useState('');
   const [tags, setTags] = useState([]);
-  const [tagCounter, setTagCounter] = useState(0);
+  const [tagCounter, setTagCounter] = useState(1);
   const token = useSelector((state) => state.token);
   const {
     register,
@@ -73,13 +73,14 @@ const EditArticle = () => {
       setShort(description);
       setText(body);
       setTagCounter(tagList.length);
-      const tagsObjects = tagList.map((item) => ({
-        label: item,
-        key: tagCounter + 1,
-        id: tagCounter + 1,
-        onDeleted,
-        register,
-      }));
+      const tagsObjects = tagList.map((item, index) => {
+        setTagCounter(index+1);
+        return {label: item,
+          key: index,
+          id: index,
+          onDeleted,
+          register};
+      });
       setTags(tagsObjects);
     });
   }, []);
@@ -93,8 +94,8 @@ const EditArticle = () => {
       if (data.tags.length > 0) newTags = data.tags.filter((item) => item.length > 0);
     }
     // blogApi.UPDARTICLE({ ...data, tags: newTags }, token, blogApi);
-    alert(JSON.stringify({ ...data, tags: newTags }));
-    // setTimeout(() => navigate('/articles'), 500);
+    blogApi.updArticle({ ...data, tags: newTags }, token, slug);
+    setTimeout(() => navigate(`/articles/${slug}`), 500);
   };
 
   return (
@@ -177,7 +178,3 @@ const EditArticle = () => {
 };
 
 export default EditArticle;
-
-/* 
-Добавьте страницу создания статьи. Правила валидации - title, short description и text обязательны для заполнения.
-*/

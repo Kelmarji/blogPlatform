@@ -129,6 +129,7 @@ export default class BlogService {
     return out;
   }
 
+  // worked
   async createArticle(data, token) {
     const { title, description, body, tags } = data;
     const article = { title, description, body };
@@ -153,6 +154,31 @@ export default class BlogService {
     return out;
   }
 
+  async updArticle(data, token, slug) {
+    const { title, description, body, tags } = data;
+    const article = { title, description, body };
+    if (tags.length > 0) article.tagList = tags;
+    const putOptions = {
+      method: 'PUT',
+      headers: {
+        Authorization: `Token ${token}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        article,
+      }),
+    };
+
+    const out = fetch(`${this.url}articles/${slug}`, putOptions)
+      .then((response) => response.json())
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+
+    return out;
+  }
+
+// worked
   async deletePost(token, slug) {
     const putOptions = {
       method: 'DELETE',
