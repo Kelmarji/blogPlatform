@@ -17,6 +17,7 @@
         .HeaderLeft {
             display: flex;
             gap: 20px;
+            align-items: center;
 
         }
         .tags {
@@ -64,7 +65,7 @@
                 position: relative;
                 left: -5px;
                 background-image: url('../assets/Like.svg');
-                background-size: 100%;
+                background-size: 100% !important;
                 background-position: 50% 70%;
                 background-repeat: no-repeat;
             }
@@ -77,7 +78,7 @@
                 position: relative;
                 left: -5px;
                 background-image: url('../assets/LikeFill.svg');
-                background-size: 100%;
+                background-size: 100% !important;
                 background-position: 50% 70%;
                 background-repeat: no-repeat;
             }

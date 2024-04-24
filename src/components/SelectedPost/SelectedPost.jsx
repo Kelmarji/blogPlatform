@@ -9,7 +9,7 @@ import BlogService from '../../services/blogService';
 
 import s from './SelectedPost.module.scss';
 
-const test = new BlogService();
+const BlogApi = new BlogService();
 
 const { Text } = Typography;
 
@@ -23,6 +23,7 @@ const tager = (arr) =>
   );
 
 const SelectedPost = ({ slug }) => {
+  const [liked, setLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const yourName = useSelector((state) => state.name);
@@ -32,28 +33,29 @@ const SelectedPost = ({ slug }) => {
   const [loaded, setLoaded] = useState(false);
   const [post, setPost] = useState({});
 
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postBody = await test.getOneArticles(postName);
+        const postBody = await BlogApi.getOneArticles(postName);
         console.log(postBody);
         setPost(postBody);
+        setLiked(postBody.article.favorited)
         setLoaded(true);
       } catch (error) {
         console.error('Ошибка при получении поста:', error);
       }
     };
     fetchPost();
-  }, [postName]);
+  }, [postName, liked]);
 
-  const [liked, setLiked] = useState(false);
+  
   const [id] = useState(Math.floor(Math.random() * 10));
   const changeLike = (value) => {
     setLiked(!value);
   };
-  console.log(loaded);
   if (loaded) {
-    const { author, body, createdAt, description, favorited, favoritedCount, tagList, title } = post.article;
+    const { author, body, createdAt, description, favorited, favoritesCount, tagList, title } = post.article;
     const { username, image } = author;
     const isYourPost = username === yourName;
     console.log('1', username, '2', yourName);
@@ -71,9 +73,18 @@ const SelectedPost = ({ slug }) => {
           <div className={s.HeaderTitle}>
             <div className={s.HeaderLeft}>
               <h2>{title}</h2>
-              <label className={favorited ? s.LikeCounterCheked : s.LikeCounterUncheked} htmlFor={id}>
-                <span>{favoritedCount > 0 ? favoritedCount : 0}</span>
+              <div 
+              style={{paddingLeft: '10px', width:'auto', cursor:'pointer'}}
+              onClick={() => {
+                BlogApi.unlikeLikePost(liked, token, slug)
+                  .then((articl) => setLiked(articl.favorited));
+                changeLike(!liked);
+              }}>
+              <label onClick={() => changeLike(!liked)} className={favorited ? s.LikeCounterCheked : s.LikeCounterUncheked} htmlFor={id}>
+                <span>
+                  {favoritesCount > 0 ? favoritesCount : 0}</span>
               </label>
+            </div>
             </div>
             <ul className={s.tags}>{tager(tagList)}</ul>
           </div>

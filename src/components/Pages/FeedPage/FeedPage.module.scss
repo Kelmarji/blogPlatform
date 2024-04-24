@@ -23,7 +23,7 @@
         padding: 20px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-between;
         .HeaderItem {
             display: flex;
             justify-content: space-between;
@@ -75,6 +75,8 @@
             font-size: 1rem;
             color: black;
                 ::before {
+                    width: 14px;
+                    height: 14px;
                     content: "   ";
                     position: relative;
                     left: -5px;

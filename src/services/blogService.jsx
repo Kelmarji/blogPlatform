@@ -129,7 +129,7 @@ export default class BlogService {
     return out;
   }
 
-  // worked
+  // создание поста
   async createArticle(data, token) {
     const { title, description, body, tags } = data;
     const article = { title, description, body };
@@ -154,6 +154,7 @@ export default class BlogService {
     return out;
   }
 
+  // редактирование поста
   async updArticle(data, token, slug) {
     const { title, description, body, tags } = data;
     const article = { title, description, body };
@@ -178,7 +179,7 @@ export default class BlogService {
     return out;
   }
 
-  // worked
+  // удаление поста
   async deletePost(token, slug) {
     const putOptions = {
       method: 'DELETE',
@@ -195,5 +196,27 @@ export default class BlogService {
         if (response.ok) console.log('успешно удалено');
       })
       .catch((err) => console.error(err.message));
+  }
+
+  // LIKE
+  async unlikeLikePost(liked, token, slug) {
+    console.log(liked);
+    let method = 'POST';
+    if (liked) method = 'DELETE';
+    console.log(method);
+    const postOptions = {
+      method,
+      headers: {
+        Authorization: `Token ${token}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    };
+
+
+    const out = fetch(`${this.url}articles/${slug}/favorite`, postOptions)
+      .then((response) => response.json())
+      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+    return out;
   }
 }
