@@ -24,7 +24,7 @@ const PostBody = ({ slug }) => {
         setPost(article);
         setLoaded(true);
       } catch (error) {
-        console.error('Error fetching article:', error);
+        throw new Error(error.message);
       }
     };
 

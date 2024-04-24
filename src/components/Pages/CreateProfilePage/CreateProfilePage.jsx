@@ -18,7 +18,6 @@ const CreateProfilePage = () => {
 
   const onSubmit = (data) => {
     if (pass !== repPass) {
-      alert('Passwords do not match');
       return;
     }
     blogApi.register(data);
