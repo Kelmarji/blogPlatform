@@ -10,6 +10,7 @@ import s from './SingInPage.module.scss';
 const blogApi = new BlogService();
 
 const SignInPage = () => {
+  const [errs, setErrs] = useState({err:false, errMsg: ''});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const dispLog = (txt) => {
@@ -30,12 +31,21 @@ const SignInPage = () => {
   } = useForm({ mode: 'onBlur' });
 
   const onSubmit = async (data) => {
-    const { user } = await blogApi.login(data);
-    const { username, token } = user;
-    localStorage.setItem('logedToken', token);
-    dispLog(token);
-    dispName(username);
-    navigate('/feed');
+    await blogApi.login(data).then((out) => {
+      setErrs({err:false, errMsg: ''});
+      if (out.user) {
+        const { username, token } = out.user;
+        localStorage.setItem('logedToken', token);
+        dispLog(token);
+        dispName(username);
+        navigate('/feed');
+      }
+      if (out.errors) {
+        setErrs({err:true, errMsg: 'неверно введён логин или пароль'});
+      };
+    })
+      .catch(() => setErrs({err:true, errMsg: 'Технические неполадки, мы уже разбираемся с этим'}));
+    
   };
 
   if (localStorage.logedToken) {
@@ -60,6 +70,7 @@ const SignInPage = () => {
               message: 'неверный формат адреса электронной почты',
             },
           })}
+          onChange={() => setErrs({err:false, errMsg: ''})}
         />
         <div style={{ height: '30', color: 'tomato', marginTop: '5px' }}>
           {errors?.email && <p style={{ margin: '0' }}>{errors.email.message}</p>}
@@ -75,11 +86,16 @@ const SignInPage = () => {
             minLength: { value: 6, message: 'минимум 6 символов' },
             maxLength: { value: 40, message: 'максимум 40 символов' },
           })}
-          onChange={(e) => setPass(e.target.value)}
-        />
+          onChange={(e) => {
+            setPass(e.target.value);
+            setErrs({err:false, errMsg: ''});}
+          }/>
         <div style={{ height: '30', color: 'tomato', marginTop: '5px' }}>
           {errors?.password && <p style={{ margin: '0' }}>от 6 до 40 символов</p>}
         </div>
+      </div>
+      <div style={{ height: '30', color: 'tomato', marginTop: '5px' }}>
+        {errs.err && <p style={{ margin: '0' }}>{errs.errMsg}</p>}
       </div>
       <input
         type="submit"

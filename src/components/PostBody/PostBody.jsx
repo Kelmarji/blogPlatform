@@ -41,6 +41,9 @@ const PostBody = ({ slug }) => {
   const changeLike = (value) => {
     setLiked(!value);
   };
+  const titler = (titl = 'untitled') => titl.length > 35 ? `${titl.slice(0, 35)}...` : titl;
+  const descr = (desc = 'no descript') => desc.length > 150 ? `${desc.slice(0, 150)}` : desc;
+  const validate = (txt,func) => txt ? func(txt) : console.log('gg',slug, txt, 'gnida ebanaya');
 
   if (!loaded) {
     return <Spin />;
@@ -58,7 +61,7 @@ const PostBody = ({ slug }) => {
         <div className={s.HeaderTitle}>
           <div className={s.HeaderLeft}>
             <Link style={{textDecoration: 'none'}} key={slug} to={`/articles/${slug}`}>
-              <h2>{title}</h2>
+              <h2>{validate(title, titler)}</h2>
             </Link>
             <div 
               style={{paddingLeft: '10px', width:'auto', cursor:'pointer'}}
@@ -74,7 +77,7 @@ const PostBody = ({ slug }) => {
             </div>
           </div>
           <ul className={s.tags}>
-            {renderTags(tagList)}
+            {renderTags(tagList.slice(0, 6))}
           </ul>
         </div>
         <div className={s.HeaderRight}>
@@ -87,7 +90,7 @@ const PostBody = ({ slug }) => {
       </div>
       <div className={s.DescPost}>
         <span className={s.DescPost}>
-          {description}
+          {validate(description, descr)}
         </span>
       </div>
     </li>

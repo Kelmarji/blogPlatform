@@ -21,7 +21,6 @@ const CreateProfilePage = () => {
       alert('Passwords do not match');
       return;
     }
-    console.log(data);
     blogApi.register(data);
   };
 

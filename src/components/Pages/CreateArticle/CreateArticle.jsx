@@ -29,7 +29,6 @@ const CreateArticle = () => {
   }, [tags, unregister]);
 
   const newTager = () => {
-    console.log(tags);
     const newTags = [...tags, { key: tagCounter + 1, id: tagCounter + 1, onDeleted, register }];
     setTags(newTags);
     setTagCounter((count) => count + 1);
@@ -39,7 +38,6 @@ const CreateArticle = () => {
   }, [tags] );
 
   const onSubmit = (data) => {
-    console.log(data);
     let newTags = [];
     if (data.tags) {
       if (data.tags.length > 0)

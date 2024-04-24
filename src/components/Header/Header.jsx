@@ -43,7 +43,7 @@ const Header = () => {
         setAvatar(res.user.image);
       });
     if (!loged) setName('jonh poe');
-  }, [loged]);
+  }, [loged, token]);
 
   return (
     <div className={h.HeaderBase}>

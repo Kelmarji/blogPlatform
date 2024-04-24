@@ -27,8 +27,7 @@ export default class BlogService {
     const res = await fetch(`${this.url}/articles/${slug}`, getOptions)
       .then((body) => body.json())
       .catch((e) => {
-        console.log(e);
-        throw new Error('OHAE');
+        throw new Error(e.message);
       });
     if (res.status === 404) throw new Error('не найдено');
     return res;
@@ -55,8 +54,10 @@ export default class BlogService {
 
     fetch(`${this.url}users`, postOptions)
       .then((response) => response.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+      .then((res) => res)
+      .catch((e) => {
+        throw new Error(e.message);
+      });
   }
 
   // login
@@ -77,9 +78,15 @@ export default class BlogService {
     };
 
     const out = fetch(`${this.url}users/login`, postOptions)
-      .then((response) => response.json())
-      .then((res) => res)
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((e) => {
+        throw new Error(e.message);
+      });
 
     return out;
   }
@@ -96,12 +103,13 @@ export default class BlogService {
     const out = fetch(`${this.url}user`, getOptions)
       .then((response) => response.json())
       .then((res) => res)
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
-
+      .catch((e) => {
+        throw new Error(e.message);
+      });
     return out;
   }
 
-  // upd user test@ya.ru 123456
+  // upd user
   async updUser(data, token) {
     const { email, password, username, image } = data;
     const user = {};
@@ -123,9 +131,10 @@ export default class BlogService {
 
     const out = fetch(`${this.url}user`, putOptions)
       .then((response) => response.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
-
+      .then((res) => res)
+      .catch((e) => {
+        throw new Error(e.message);
+      });
     return out;
   }
 
@@ -146,13 +155,12 @@ export default class BlogService {
       }),
     };
 
-    const out = fetch(`${this.url}articless`, putOptions)
+    const out = fetch(`${this.url}articles`, putOptions)
       .then((response) => {
-        console.log(response);
         if (!response.ok) throw new Error('не отправилось');
         return response.json();
       })
-      .then((res) => console.log(res))
+      .then((res) => res)
       .catch((err) => {
         throw new Error(err.message);
       });
@@ -178,9 +186,11 @@ export default class BlogService {
     };
 
     const out = fetch(`${this.url}articles/${slug}`, putOptions)
-      .then((response) => response.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => res)
+      .catch((e) => new Error(e.message)); // Log error messages for better understanding.
 
     return out;
   }
@@ -199,17 +209,17 @@ export default class BlogService {
 
     fetch(`${this.url}articles/${slug}`, putOptions)
       .then((response) => {
-        if (response.ok) console.log('успешно удалено');
+        if (!response.ok) throw new Error('не удалилось');
       })
-      .catch((err) => console.error(err.message));
+      .catch((e) => {
+        throw new Error(e.message);
+      });
   }
 
   // LIKE
   async unlikeLikePost(liked, token, slug) {
-    console.log(liked);
     let method = 'POST';
     if (liked) method = 'DELETE';
-    console.log(method);
     const postOptions = {
       method,
       headers: {
@@ -222,7 +232,9 @@ export default class BlogService {
 
     const out = fetch(`${this.url}articles/${slug}/favorite`, postOptions)
       .then((response) => response.json())
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+      .catch((e) => {
+        throw new Error(e.message);
+      });
     return out;
   }
 }

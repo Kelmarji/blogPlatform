@@ -7,12 +7,6 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import { thunk } from 'redux-thunk';
 
-const loggerMiddleware = (store) => (next) => (action) => {
-  console.log('old state', store.getState());
-  const result = next(action);
-  console.log('New state:', store.getState());
-  return result;
-};
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 let token = '';
@@ -25,7 +19,6 @@ if (localStorage.logedToken) {
 
 const defaultState = {
   token,
-  message: 'Yes, you can',
   name: '',
 };
 const reducer = (state = defaultState, action) => {
@@ -40,6 +33,6 @@ const reducer = (state = defaultState, action) => {
       return state;
   }
 };
-const store = createStore(reducer, composeEnhancers(applyMiddleware(loggerMiddleware, thunk)));
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
 export default store;

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Card, Typography, Flex, Button } from 'antd';
+import { Card, Typography, Flex, Button, Alert } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -35,6 +35,7 @@ const TagsEdit = ({ label, onDeleted, id, register }) => {
 };
 
 const EditArticle = () => {
+  const [ers, setErs] = useState({err: false, errMsg:''});
   const sl = useParams();
   const { slug } = sl;
   const [namePost, setNamePost] = useState('');
@@ -60,7 +61,6 @@ const EditArticle = () => {
   );
 
   const newTager = () => {
-    console.log(tags);
     const newTags = [...tags, { label: '', key: tagCounter + 1, id: tagCounter + 1, onDeleted, register }];
     setTags(newTags);
     setTagCounter((count) => count + 1);
@@ -88,14 +88,24 @@ const EditArticle = () => {
   useEffect(() => {}, [tags]);
 
   const onSubmit = (data) => {
-    console.log(data);
     let newTags = [];
     if (data.tags) {
       if (data.tags.length > 0) newTags = data.tags.filter((item) => item.length > 0);
     }
-    // blogApi.UPDARTICLE({ ...data, tags: newTags }, token, blogApi);
-    blogApi.updArticle({ ...data, tags: newTags }, token, slug);
-    setTimeout(() => navigate(`/articles/${slug}`), 500);
+    blogApi.updArticle({ ...data, tags: newTags }, token, slug)
+      .then((body) => {
+        if (body.errors) {
+          setErs({err: true, errMsg:'Неудалось сохранить изменения, попробуйте позже.'});
+          setTimeout(() => navigate(`/articles/${slug}`), 10000);
+        }
+        if (!body.errors) {
+          setTimeout(() => navigate(`/articles/${slug}`), 500);
+        }
+      })
+      .catch(() => {
+        setErs({err: true, errMsg:'Неудалось сохранить изменения, попробуйте позже.'});
+      });
+    
   };
 
   if (!token) {
@@ -103,6 +113,10 @@ const EditArticle = () => {
       navigate('/articles');
     };
   };
+
+  if (ers.err) {
+    return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Alert style={{fontSize:'2em'}} showIcon type="error" message='Ops, something wrong' description={ers.errMsg} /></Flex>);
+  }
 
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
