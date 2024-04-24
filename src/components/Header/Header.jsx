@@ -45,8 +45,6 @@ const Header = () => {
     if (!loged) setName('jonh poe');
   }, [loged]);
 
-  blogApi.getLoged(token).then((res) => console.log(res));
-
   return (
     <div className={h.HeaderBase}>
       <Link to="/articles">

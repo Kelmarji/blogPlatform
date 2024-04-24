@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Spin, Typography } from 'antd';
+import { Button, Flex, Spin, Typography, Alert } from 'antd';
 import { format } from 'date-fns';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 
@@ -28,23 +28,23 @@ const SelectedPost = ({ slug }) => {
   const navigate = useNavigate();
   const yourName = useSelector((state) => state.name);
   const token = useSelector((state) => state.token);
-  console.log(useParams());
   const [postName] = useState(slug);
   const [loaded, setLoaded] = useState(false);
   const [post, setPost] = useState({});
+  const [error, setErr] = useState({err: false, msg:''});
 
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const postBody = await BlogApi.getOneArticles(postName);
-        console.log(postBody);
         setPost(postBody);
-        setLiked(postBody.article.favorited)
+        setLiked(postBody.article.favorited);
         setLoaded(true);
-      } catch (error) {
-        console.error('Ошибка при получении поста:', error);
-      }
+        setErr({err: false, msg:''});
+      } catch {
+        setErr({err:true, msg:'небольшие технические шоколадки, мы уже работаем над этим...'});
+      };
     };
     fetchPost();
   }, [postName, liked]);
@@ -58,8 +58,6 @@ const SelectedPost = ({ slug }) => {
     const { author, body, createdAt, description, favorited, favoritesCount, tagList, title } = post.article;
     const { username, image } = author;
     const isYourPost = username === yourName;
-    console.log('1', username, '2', yourName);
-    console.log(`ourPost? ${isYourPost}`);
     return (
       <li key={slug.slug} id={slug.slug} className={s.listItem}>
         <input
@@ -74,17 +72,17 @@ const SelectedPost = ({ slug }) => {
             <div className={s.HeaderLeft}>
               <h2>{title}</h2>
               <div 
-              style={{paddingLeft: '10px', width:'auto', cursor:'pointer'}}
-              onClick={() => {
-                BlogApi.unlikeLikePost(liked, token, slug)
-                  .then((articl) => setLiked(articl.favorited));
-                changeLike(!liked);
-              }}>
-              <label onClick={() => changeLike(!liked)} className={favorited ? s.LikeCounterCheked : s.LikeCounterUncheked} htmlFor={id}>
-                <span>
-                  {favoritesCount > 0 ? favoritesCount : 0}</span>
-              </label>
-            </div>
+                style={{paddingLeft: '10px', width:'auto', cursor:'pointer'}}
+                onClick={() => {
+                  BlogApi.unlikeLikePost(liked, token, slug)
+                    .then((articl) => setLiked(articl.favorited));
+                  changeLike(!liked);
+                }}>
+                <label onClick={() => changeLike(!liked)} className={favorited ? s.LikeCounterCheked : s.LikeCounterUncheked} htmlFor={id}>
+                  <span>
+                    {favoritesCount > 0 ? favoritesCount : 0}</span>
+                </label>
+              </div>
             </div>
             <ul className={s.tags}>{tager(tagList)}</ul>
           </div>
@@ -109,7 +107,7 @@ const SelectedPost = ({ slug }) => {
                     <Button onClick={() => setIsOpen(false)}>No</Button>
                     <Button type='primary'
                       onClick={() => {
-                        test.deletePost(token, slug);
+                        BlogApi.deletePost(token, slug);
                         setTimeout(() => navigate('/feed'), 500);
                       }}
                     >Yes</Button>
@@ -141,7 +139,12 @@ const SelectedPost = ({ slug }) => {
       </li>
     );
   }
-  return <Spin />;
+
+  if (error.err) {
+    return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Alert style={{fontSize:'2em'}} showIcon type="error" message='Ops, something wrong' description={error.msg} /></Flex>);
+  };
+
+  return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Spin size={'large'} /></Flex>);
 };
 
 export default SelectedPost;

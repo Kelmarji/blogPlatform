@@ -146,10 +146,16 @@ export default class BlogService {
       }),
     };
 
-    const out = fetch(`${this.url}articles`, putOptions)
-      .then((response) => response.json())
+    const out = fetch(`${this.url}articless`, putOptions)
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) throw new Error('не отправилось');
+        return response.json();
+      })
       .then((res) => console.log(res))
-      .catch((err) => console.error(err.message)); // Log error messages for better understanding.
+      .catch((err) => {
+        throw new Error(err.message);
+      });
 
     return out;
   }

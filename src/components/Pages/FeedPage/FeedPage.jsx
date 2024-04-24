@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, ConfigProvider, Spin } from 'antd';
+import { Pagination, ConfigProvider, Spin, Alert, Flex } from 'antd';
 // import { useParams } from 'react-router-dom';
 
 import PostBody from '../../PostBody/PostBody';
@@ -15,24 +15,29 @@ const FeedPage = () => {
   const [posts, setPosts] = useState([]);
   const [postCount, setPostCount] = useState(5);
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
   
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         const body = await BlogApi.getArticles(page);
-        console.log(body);
         setPostCount(Math.floor(body.articlesCount / 5));
         setPosts(body.articles.map((article) => <PostBody key={article.slug} slug={article.slug} />));
         setLoaded(true);
-      } catch (error) {
-        console.error('Error fetching articles:', error);
+        setError(false);
+      } catch {
+        setError(true);
+        setErrMsg('Хьюстон у нас проблемки, мы уже фиксики трай ит лэйтэр');
       }
     };
 
     fetchArticles();
   }, [ page ]);
 
-  console.log(postCount);
+  if (!postCount.length && error) {
+    return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Alert style={{fontSize:'2em'}} showIcon type="error" message='Ops, something wrong' description={[errMsg].join('\n')} /></Flex>);
+  }
   
   if (!loaded || posts.length === 0) {
     return <Spin />;

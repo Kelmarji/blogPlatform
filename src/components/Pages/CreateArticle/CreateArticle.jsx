@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Card, Typography, Flex, Button } from 'antd';
+import { Card, Typography, Flex, Button, Alert } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ const CreateArticle = () => {
   const token = useSelector((state) => state.token);
   const [tagCounter, setTagCounter] = useState(0);
   const [tags, setTags] = useState([]);
+  const [err,setErr] = useState({errs:false, errMsg:''});
   const {register, formState: {errors}, handleSubmit, unregister} = useForm({mode:'onBlur'});
   const navigate = useNavigate();
 
@@ -44,11 +45,18 @@ const CreateArticle = () => {
       if (data.tags.length > 0)
         newTags = data.tags.filter((item) => item.length > 0);
     }
-    blogApi.createArticle({...data, tags: newTags}, token, blogApi);
-    setTimeout(() => navigate('/articles'), 500);
+    blogApi.createArticle({...data, tags: newTags}, token, blogApi)
+      .then(() => {
+        setTimeout(() => navigate('/articles'), 500);
+      })
+      .catch((e) => {
+        setErr({errs:true, errMsg:e.message});
+      });
   };
 
-
+  if (err.errs) {
+    return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Alert style={{fontSize:'2em'}} showIcon type="error" message='Ops, something wrong' description={err.errMsg} /></Flex>);
+  }
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
       <Title style={{ textAlign: 'center' }} level={2}>Create new article</Title>
