@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 
 import BlogService from '../../services/blogService';
+import Ava from '../assets/Rectangle 1.png';
 
 import s from './SelectedPost.module.scss';
 
@@ -23,6 +24,7 @@ const tager = (arr) =>
   );
 
 const SelectedPost = ({ slug }) => {
+  const [avatar, setAvatar] = useState(Ava);
   const [liked, setLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ const SelectedPost = ({ slug }) => {
         const postBody = await BlogApi.getOneArticles(postName);
         setPost(postBody);
         setLiked(postBody.article.favorited);
+        setAvatar(postBody.article.author.image);
         setLoaded(true);
         setErr({err: false, msg:''});
       } catch {
@@ -56,7 +59,8 @@ const SelectedPost = ({ slug }) => {
   };
   if (loaded) {
     const { author, body, createdAt, description, favorited, favoritesCount, tagList, title } = post.article;
-    const { username, image } = author;
+    const username = author ? author.username : '';
+    const image = avatar;
     const isYourPost = username === yourName;
     return (
       <li key={slug.slug} id={slug.slug} className={s.listItem}>
@@ -91,7 +95,7 @@ const SelectedPost = ({ slug }) => {
               <h3>{username}</h3>
               <span>{`${format(new Date(createdAt), 'MMMM dd, yyyy')}`}</span>
             </div>
-            <img style={{ borderRadius: '50%' }} src={image} />
+            <img style={{ borderRadius: '50%' }} onError={() => setAvatar(Ava)} src={image} />
           </div>
         </div>
         <Flex gap="10px">
