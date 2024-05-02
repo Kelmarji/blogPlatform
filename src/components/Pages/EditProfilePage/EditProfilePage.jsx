@@ -12,6 +12,7 @@ const blogApi = new BlogService();
 
 
 const EditProfilePage = () => {
+  localStorage.page = 1;
   const navigate = useNavigate();
   const disp = useDispatch();
   const [err, setErr] = useState({errs: false, errMsg:''});

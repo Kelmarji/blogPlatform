@@ -35,7 +35,8 @@ const TagsEdit = ({ label, onDeleted, id, register }) => {
 };
 
 const EditArticle = () => {
-  const [ers, setErs] = useState({err: false, errMsg:''});
+  localStorage.page = 1;
+  const [ers, setErs] = useState({ err: false, errMsg: '' });
   const sl = useParams();
   const { slug } = sl;
   const [namePost, setNamePost] = useState('');
@@ -74,12 +75,8 @@ const EditArticle = () => {
       setText(body);
       setTagCounter(tagList.length);
       const tagsObjects = tagList.map((item, index) => {
-        setTagCounter(index+1);
-        return {label: item,
-          key: index,
-          id: index,
-          onDeleted,
-          register};
+        setTagCounter(index + 1);
+        return { label: item, key: index, id: index, onDeleted, register };
       });
       setTags(tagsObjects);
     });
@@ -90,12 +87,13 @@ const EditArticle = () => {
   const onSubmit = (data) => {
     let newTags = [];
     if (data.tags) {
-      if (data.tags.length > 0) newTags = data.tags.filter((item) => item.length > 0);
+      if (data.tags.length > 0) newTags = data.tags.filter((item) => item.trim().length !== 0);
     }
-    blogApi.updArticle({ ...data, tags: newTags }, token, slug)
+    blogApi
+      .updArticle({ ...data, tags: newTags }, token, slug)
       .then((body) => {
         if (body.errors) {
-          setErs({err: true, errMsg:'Неудалось сохранить изменения, попробуйте позже.'});
+          setErs({ err: true, errMsg: 'Неудалось сохранить изменения, попробуйте позже.' });
           setTimeout(() => navigate(`/articles/${slug}`), 10000);
         }
         if (!body.errors) {
@@ -103,20 +101,42 @@ const EditArticle = () => {
         }
       })
       .catch(() => {
-        setErs({err: true, errMsg:'Неудалось сохранить изменения, попробуйте позже.'});
+        setErs({ err: true, errMsg: 'Неудалось сохранить изменения, попробуйте позже.' });
       });
-    
   };
 
   if (!token) {
     if (!token.length) {
       navigate('/articles');
-    };
-  };
+    }
+  }
 
   if (ers.err) {
-    return (<Flex style={{height: '80vh'}} align='center' justify='space-between'><Alert style={{fontSize:'2em'}} showIcon type="error" message='Ops, something wrong' description={ers.errMsg} /></Flex>);
+    return (
+      <Flex style={{ height: '80vh' }} align="center" justify="space-between">
+        <Alert
+          style={{ fontSize: '2em' }}
+          showIcon
+          type="error"
+          message="Ops, something wrong"
+          description={ers.errMsg}
+        />
+      </Flex>
+    );
   }
+
+  const tagsOnEdit =
+    tags.length > 0
+      ? tags.map((item) => (
+        <TagsEdit
+          label={item.label}
+          key={item.key}
+          id={item.id}
+          onDeleted={item.onDeleted}
+          register={item.register}
+        />
+      ))
+      : null;
 
   return (
     <Card style={{ width: '80%' }} className={t.CreateArticle}>
@@ -133,6 +153,9 @@ const EditArticle = () => {
             placeholder="Title"
             {...register('title', {
               required: 'обязательное поле',
+              validate: (value) => {
+                return /\S/.test(value.trim()) || 'поле не должно быть пустым.';
+              },
             })}
             onChange={(e) => setNamePost(e.target.value)}
           />
@@ -146,11 +169,14 @@ const EditArticle = () => {
             placeholder="Short description"
             {...register('description', {
               required: 'обязательное поле',
+              validate: (value) => {
+                return /\S/.test(value.trim()) || 'поле не должно быть пустым.';
+              },
             })}
             onChange={(e) => setShort(e.target.value)}
           />
           <div style={{ height: '30', color: 'tomato', marginTop: '5px' }}>
-            {errors?.desc && <p style={{ margin: '0' }}>{errors.desc.message}</p>}
+            {errors?.description && <p style={{ margin: '0' }}>{errors.description.message}</p>}
           </div>
           <Text style={{ fontWeight: '500' }}>Text</Text>
           <textarea
@@ -161,6 +187,9 @@ const EditArticle = () => {
             style={{ height: 168, resize: 'none' }}
             {...register('body', {
               required: 'обязательное поле',
+              validate: (value) => {
+                return /\S/.test(value.trim()) || 'поле не должно быть пустым.';
+              },
             })}
             onChange={(e) => setText(e.target.value)}
           />
@@ -170,19 +199,7 @@ const EditArticle = () => {
           <Text style={{ fontWeight: '500' }}>Tags</Text>
           <Flex gap="10px">
             <Flex vertical={true} gap="10px">
-              {tags.length > 0
-                ? tags.map((item) => {
-                  return (
-                    <TagsEdit
-                      label={item.label}
-                      key={item.key}
-                      id={item.id}
-                      onDeleted={item.onDeleted}
-                      register={item.register}
-                    />
-                  );
-                })
-                : null}
+              {tagsOnEdit}
             </Flex>
             <Flex align="flex-end" justify="flex-end">
               <Button type="primary" ghost onClick={newTager}>

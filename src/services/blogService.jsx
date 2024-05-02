@@ -142,6 +142,8 @@ export default class BlogService {
   async createArticle(data, token) {
     const { title, description, body, tags } = data;
     const article = { title, description, body };
+    article.title = title.trim();
+    article.description = description.trim();
     if (tags.length > 0) article.tagList = tags;
     const putOptions = {
       method: 'POST',
@@ -172,6 +174,8 @@ export default class BlogService {
   async updArticle(data, token, slug) {
     const { title, description, body, tags } = data;
     const article = { title, description, body };
+    article.title = title.trim();
+    article.description = description.trim();
     if (tags.length > 0) article.tagList = tags;
     const putOptions = {
       method: 'PUT',
@@ -228,7 +232,6 @@ export default class BlogService {
         'Content-Type': 'application/json;charset=utf-8',
       },
     };
-
 
     const out = fetch(`${this.url}articles/${slug}/favorite`, postOptions)
       .then((response) => response.json())

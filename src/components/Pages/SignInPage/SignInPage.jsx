@@ -10,6 +10,7 @@ import s from './SingInPage.module.scss';
 const blogApi = new BlogService();
 
 const SignInPage = () => {
+  localStorage.page = 1;
   const [errs, setErrs] = useState({err:false, errMsg: ''});
   const navigate = useNavigate();
   const dispatch = useDispatch();

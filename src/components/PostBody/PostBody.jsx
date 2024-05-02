@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+import Ava from '../assets/Rectangle 1.png';
 import BlogService from '../../services/blogService';
 
 import s from './PostBody.module.scss';
@@ -14,6 +15,7 @@ const PostBody = ({ slug }) => {
   const [liked, setLiked] = useState(false);
   const [post, setPost] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const [avatar, setAvatar] = useState(Ava);
   const token = useSelector((state) => state.token);
 
   useEffect(() => {
@@ -22,6 +24,7 @@ const PostBody = ({ slug }) => {
         const { article } = await BlogApi.getOneArticles(slug);
         setLiked(article.favorited);
         setPost(article);
+        setAvatar(article.author.image);
         setLoaded(true);
       } catch (error) {
         throw new Error(error.message);
@@ -34,7 +37,7 @@ const PostBody = ({ slug }) => {
   const { author, createdAt, description, favorited, favoritesCount, tagList, title } = post;
 
   const username = author ? author.username : '';
-  const image = author ? author.image : '';
+  const image = avatar;
 
   const renderTags = (arr) =>
     arr.map((item, index) =>
@@ -93,7 +96,7 @@ const PostBody = ({ slug }) => {
             <h3>{username}</h3>
             <span>{format(new Date(createdAt), 'MMMM dd, yyyy')}</span>
           </div>
-          <img style={{ borderRadius: '50%' }} src={image} alt={username} />
+          <img style={{ borderRadius: '50%' }} src={image} onError={() => setAvatar(Ava)} alt={username} />
         </div>
       </div>
       <div className={s.DescPost}>
