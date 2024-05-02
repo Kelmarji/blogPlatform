@@ -47,7 +47,9 @@ const Header = () => {
 
   return (
     <div className={h.HeaderBase}>
-      <Link to="/articles">
+      <Link to="/articles" onClick={() => {
+        localStorage.page = 1;
+      }}>
         <span>Realworld Blog</span>
       </Link>
       <div className={h.HeaderBtnGroup}>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, ConfigProvider, Spin, Alert, Flex } from 'antd';
-// import { useParams } from 'react-router-dom';
 
 import PostBody from '../../PostBody/PostBody';
 import BlogService from '../../../services/blogService';
@@ -9,9 +8,9 @@ import s from './FeedPage.module.scss';
 
 const BlogApi = new BlogService();
 
-const startingPage = localStorage.page ? localStorage.page : 0;
 
 const FeedPage = () => {
+  const startingPage = localStorage.page > 1 ? localStorage.page : 1;
   const [page, setPage] = useState(startingPage);
   const [posts, setPosts] = useState([]);
   const [postCount, setPostCount] = useState(5);
